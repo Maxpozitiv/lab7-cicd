@@ -1,0 +1,32 @@
+name: Node.js CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Завантажуємо код з репозиторію
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Встановлюємо Node.js
+    - name: Use Node.js 18.x
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    # 3. Встановлюємо залежності
+    - name: Install dependencies
+      run: npm install
+
+    # 4. ВАРІАНТ 2: Автоматичне тестування
+    - name: Run Tests
+      run: npm test
+
+    # 5. Перевірка збірки Docker (Build only)
+    - name: Build Docker Image
+      run: docker build . --file Dockerfile --tag my-app-name:$(date +%s)
